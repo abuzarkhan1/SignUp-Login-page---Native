@@ -21,8 +21,15 @@ const SignUpScreen = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [avatar, setAvatar] = useState(avatars[0]?.image.asset.url);
+  const [isAvatarMenu, setIsAvatarMenu] = useState(false);
+  const [getEmailValidationStatus, setgetEmailValidationStatus] = useState(false);
+
 
   const navigation = useNavigation();
+  const handleAvatar = (item) => {
+    setAvatar(item?.image.asset.url)
+    setIsAvatarMenu(false);
+  }
 
   return (
     <View className="flex-1 items-center justify-start">
@@ -33,7 +40,9 @@ const SignUpScreen = () => {
         style={{ width: screenWidth }}
       />
 
-      <>
+    {
+      isAvatarMenu && (
+        <>
         {/*List of avatar  */}
         <View
           className="absolute inset-0 z-10"
@@ -48,6 +57,7 @@ const SignUpScreen = () => {
             >
               {avatars?.map((item) => (
                 <TouchableOpacity
+                  onPress={()=> handleAvatar(item)}
                   key={item._id}
                   className="w-20 h-20 m-2 p-1 rounded-full border-2 border-primary relative"
                 >
@@ -58,11 +68,12 @@ const SignUpScreen = () => {
                   />
                 </TouchableOpacity>
               ))}      
-              {/* time 1:00 */}
             </BlurView>
           </ScrollView>
         </View>
       </>
+      )
+    }
 
       <View className="w-full h-full bg-white rounded-tl-[90px] -mt-44 flex items-center justify-start py-6 px-6">
         <Image source={Logo} className="h-16 w-16" resizeMode="contain" />
@@ -72,8 +83,8 @@ const SignUpScreen = () => {
 
         {/* Avatar*/}
 
-        <View className="w-full flex items-center justify-center relative mt-2">
-          <TouchableOpacity className="w-20 h-20 p-1 rounded-full border-2 border-primary relative">
+        <View className="w-full flex items-center justify-center relative ">
+          <TouchableOpacity onPress={()=>setIsAvatarMenu(true)} className="w-20 h-20 p-1 rounded-full border-2 border-primary relative">
             <Image
               source={{ uri: avatar }}
               className="w-full h-full"
@@ -90,7 +101,7 @@ const SignUpScreen = () => {
           <UserTextInput
             placeholder="Full Name"
             isPass={false}
-            setStateValue={setEmail}
+            setStateValue={setName}
           />
 
           {/* email */}
@@ -98,6 +109,8 @@ const SignUpScreen = () => {
             placeholder="Email"
             isPass={false}
             setStateValue={setEmail}
+            setgetEmailValidationStatus={setgetEmailValidationStatus}
+
           />
 
           {/* password */}
@@ -117,14 +130,13 @@ const SignUpScreen = () => {
           </TouchableOpacity>
 
           <View className="w-full py-12 flex-row items-center justify-center space-x-2">
-            <Text className="text-base text-primaryText ">
-              {" "}
+            <Text className="text-base text-primaryText -my-4">
               Have an account?
             </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("LoginScreen")}
             >
-              <Text className="text-base font-semibold text-primaryBold">
+              <Text className="text-base font-semibold text-primaryBold -my-2">
                 Login Here
               </Text>
             </TouchableOpacity>

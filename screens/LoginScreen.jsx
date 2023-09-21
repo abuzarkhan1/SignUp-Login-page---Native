@@ -8,6 +8,8 @@ const LoginScreen = () => {
   const screenWidth = Math.round(Dimensions.get("window").width);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [getEmailValidationStatus, setgetEmailValidationStatus] = useState(false);
+
 
   const navigation = useNavigation();
 
@@ -32,6 +34,7 @@ const LoginScreen = () => {
             placeholder="Email"
             isPass={false}
             setStateValue={setEmail}
+            setgetEmailValidationStatus={setgetEmailValidationStatus}
           />
 
           {/* password */}

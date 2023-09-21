@@ -2,15 +2,22 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
-const UserTextInput = ({ placeholder, isPass, setStateValue }) => {
+  const UserTextInput = ({ placeholder, isPass, setStateValue,setgetEmailValidationStatus  }) => {
   const [value, setValue] = useState("");
   const [showPass, setshowPass] = useState(true);
   const [Icon, setIcon] = useState(null);
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  // 1:08 times
   
 
   const handleTextChange = (text) => {
     setValue(text);
     setStateValue(value)
+  }
+
+  if(placeholder === "Email"){
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const status = emailRegex.test(value);
   }
 
   useLayoutEffect(() => {
