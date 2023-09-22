@@ -2,37 +2,48 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
-  const UserTextInput = ({ placeholder, isPass, setStateValue,setgetEmailValidationStatus  }) => {
+const UserTextInput = ({
+  placeholder,
+  isPass,
+  setStateValue,
+  setgetEmailValidationStatus,
+}) => {
   const [value, setValue] = useState("");
   const [showPass, setshowPass] = useState(true);
   const [Icon, setIcon] = useState(null);
   const [isEmailValid, setIsEmailValid] = useState(false);
-  // 1:08 times
-  
 
   const handleTextChange = (text) => {
     setValue(text);
-    setStateValue(value)
-  }
+    setStateValue(value);
 
-  if(placeholder === "Email"){
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const status = emailRegex.test(value);
-  }
+    if (placeholder === "Email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const status = emailRegex.test(value)
+      setIsEmailValid(status)
+      setgetEmailValidationStatus(status);
+    }
+  };
+
+ 
 
   useLayoutEffect(() => {
-    switch(placeholder){
-      case "Full Name" : 
-      return setIcon("person")
-      case "Email" : 
-      return setIcon("email")
-      case "Password" :
-        return setIcon("lock")
+    switch (placeholder) {
+      case "Full Name":
+        return setIcon("person");
+      case "Email":
+        return setIcon("email");
+      case "Password":
+        return setIcon("lock");
     }
-  }, [])
+  }, []);
   return (
     <View
-      className={`border rounded-2xl px-4 py-6 flex-row items-center justify-between space-x-4  my-2 border-gray-200`}
+      className={`border rounded-2xl px-4 py-6 flex-row items-center justify-between space-x-4  my-2 ${
+        !isEmailValid && placeholder == "Email" && value.length > 0
+          ? "border-red-600"
+          : "border-gray-200"
+      }`}
     >
       <MaterialIcons name={Icon} size={24} color={"#6c6d83"} />
       <TextInput
@@ -44,8 +55,12 @@ import { Entypo, MaterialIcons } from "@expo/vector-icons";
         autoCapitalize="none"
       />
       {isPass && (
-        <TouchableOpacity onPress={()=> setshowPass(!showPass)}>
-          <Entypo name={`${showPass ? "eye" : "eye-with-line"}`} size={24} color={"#6c6d83"}/>
+        <TouchableOpacity onPress={() => setshowPass(!showPass)}>
+          <Entypo
+            name={`${showPass ? "eye" : "eye-with-line"}`}
+            size={24}
+            color={"#6c6d83"}
+          />
         </TouchableOpacity>
       )}
     </View>

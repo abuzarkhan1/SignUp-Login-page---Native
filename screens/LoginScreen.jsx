@@ -3,16 +3,27 @@ import React, { useState } from "react";
 import { BGImage, Logo } from "../assets";
 import { UserTextInput } from "../components";
 import { useNavigation } from "@react-navigation/native";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const LoginScreen = () => {
   const screenWidth = Math.round(Dimensions.get("window").width);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [getEmailValidationStatus, setgetEmailValidationStatus] = useState(false);
-
+  const [getEmailValidationStatus, setgetEmailValidationStatus] =
+    useState(false);
 
   const navigation = useNavigation();
-
+  const handleLogin = async () => {
+    if (getEmailValidationStatus && email !== "") {
+      await createUserWithEmailAndPassword(firebaseAuth, email, password).then(
+        (userCred) => {
+          if(userCred){
+            console.log("User Id" , userCred?.user.uid);
+          }
+        }
+      );
+    }
+  };
   return (
     <View className="flex-1 items-center justify-start">
       <Image
@@ -42,12 +53,15 @@ const LoginScreen = () => {
           <UserTextInput
             placeholder="Password"
             isPass={true}
-            setStateValue={setEmail}
+            setStateValue={setPassword}
           />
 
           {/* Login Button */}
 
-          <TouchableOpacity className="w-full px-4 py-2 rounded-xl bg-primary my-3 flex items-center justify-center">
+          <TouchableOpacity
+            onPress={handleLogin}
+            className="w-full px-4 py-2 rounded-xl bg-primary my-3 flex items-center justify-center"
+          >
             <Text className="py-2 text-white text-xl font-semibold">
               Sign In
             </Text>
