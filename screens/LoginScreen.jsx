@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { BGImage, Logo } from "../assets";
 import { UserTextInput } from "../components";
 import { useNavigation } from "@react-navigation/native";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { firebaseAuth } from "../config/firebase.config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
 const LoginScreen = () => {
   const screenWidth = Math.round(Dimensions.get("window").width);
@@ -15,10 +17,15 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const handleLogin = async () => {
     if (getEmailValidationStatus && email !== "") {
-      await createUserWithEmailAndPassword(firebaseAuth, email, password).then(
+      await signInWithEmailAndPassword(firebaseAuth, email, password).then(
         (userCred) => {
           if(userCred){
             console.log("User Id" , userCred?.user.uid);
+            getDoc(doc(firebaseDB, "user" ,  userCred?.user.uid)).then(docSnap => {
+              if(docSnap.exists()){
+                console.log("User Data : " , docSnap.data());
+              }
+            })
           }
         }
       );
@@ -63,7 +70,7 @@ const LoginScreen = () => {
             className="w-full px-4 py-2 rounded-xl bg-primary my-3 flex items-center justify-center"
           >
             <Text className="py-2 text-white text-xl font-semibold">
-              Sign In
+              Login In
             </Text>
           </TouchableOpacity>
 
